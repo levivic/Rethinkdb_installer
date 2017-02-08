@@ -6,6 +6,7 @@ export LD_LIBRARY_PATH=/usr/local/lib
 
 apt-get -y update
 apt-get install -y git libssl-dev build-essential protobuf-compiler python libprotobuf-dev libcurl4-openssl-dev libboost-all-dev libncurses5-dev wget m4 autoconf openjdk-8-jdk
+apt autoremove
 
 ./install_jemalloc.sh
 . install_node.sh

@@ -1,3 +1,4 @@
+git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 git clone https://github.com/ibmruntimes/v8z
 cd v8z
 git checkout 3.28-s390
