@@ -3,7 +3,7 @@ echo "PATH=\$PATH:/root/ibm/node/bin/:$dir/depot_tools/" >> ~/.bashrc
 echo "LD_LIBRARY_PATH=/usr/local/lib" >> ~/.bashrc
 
 apt-get -y update
-apt-get install -y build-essential protobuf-compiler python libprotobuf-dev libcurl4-openssl-dev libboost-all-dev libncurses5-dev wget m4 autoconf openjdk-8-jdk
+apt-get install -y git libssl-dev build-essential protobuf-compiler python libprotobuf-dev libcurl4-openssl-dev libboost-all-dev libncurses5-dev wget m4 autoconf openjdk-8-jdk
 
 ./install_jemalloc.sh
 ./install_node.sh
