@@ -140,7 +140,7 @@ index 07080ad..5d762de 100644
          mutable_buffer[i + sizeof(token)] =
              reinterpret_cast<const char *>(&data_size)[i];
 diff --git a/src/client_protocol/server.cc b/src/client_protocol/server.cc
-index bf8fce5..17e4bae 100644
+index bf8fce5..dd64f2f 100644
 --- a/src/client_protocol/server.cc
 +++ b/src/client_protocol/server.cc
 @@ -280,6 +280,7 @@ void query_server_t::handle_conn(const scoped_ptr_t<tcp_conn_descriptor_t> &ncon
@@ -151,6 +151,22 @@ index bf8fce5..17e4bae 100644
  
          switch (client_magic_number) {
              case VersionDummy::V0_1:
+@@ -315,6 +316,7 @@ void query_server_t::handle_conn(const scoped_ptr_t<tcp_conn_descriptor_t> &ncon
+ 
+             uint32_t auth_key_size;
+             conn->read_buffered(&auth_key_size, sizeof(uint32_t), &ct_keepalive);
++            auth_key_size = __builtin_bswap32(auth_key_size);
+             if (auth_key_size > 2048) {
+                 throw client_protocol::client_server_error_t(
+                     -1, "Client provided an authorization key that is too long.");
+@@ -740,6 +742,7 @@ void query_server_t::handle(const http_req_t &req,
+     json_protocol_t::write_response_to_buffer(&response, &buffer);
+ 
+     uint32_t size = static_cast<uint32_t>(buffer.GetSize());
++    size = __builtin_bswap32(size);
+     char header_buffer[sizeof(token) + sizeof(size)];
+     memcpy(&header_buffer[0], &token, sizeof(token));
+     memcpy(&header_buffer[sizeof(token)], &size, sizeof(size));
 diff --git a/src/perfmon/perfmon.cc b/src/perfmon/perfmon.cc
 index 276d8ac..6989683 100644
 --- a/src/perfmon/perfmon.cc
