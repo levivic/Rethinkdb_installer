@@ -151,7 +151,7 @@ index 07080ad..a7ff281 100644
  }
  
 diff --git a/src/client_protocol/server.cc b/src/client_protocol/server.cc
-index bf8fce5..e7cab7c 100644
+index bf8fce5..ed14646 100644
 --- a/src/client_protocol/server.cc
 +++ b/src/client_protocol/server.cc
 @@ -37,6 +37,7 @@
@@ -182,7 +182,17 @@ index bf8fce5..e7cab7c 100644
              if (auth_key_size > 2048) {
                  throw client_protocol::client_server_error_t(
                      -1, "Client provided an authorization key that is too long.");
-@@ -740,6 +747,9 @@ void query_server_t::handle(const http_req_t &req,
+@@ -334,6 +341,9 @@ void query_server_t::handle_conn(const scoped_ptr_t<tcp_conn_descriptor_t> &ncon
+ 
+             int32_t wire_protocol;
+             conn->read_buffered(&wire_protocol, sizeof(wire_protocol), &ct_keepalive);
++            if (is_bigendian()) {
++                wire_protocol = __builtin_bswap32(wire_protocol);
++            }
+             switch (wire_protocol) {
+                 case VersionDummy::JSON:
+                     break;
+@@ -740,6 +750,9 @@ void query_server_t::handle(const http_req_t &req,
      json_protocol_t::write_response_to_buffer(&response, &buffer);
  
      uint32_t size = static_cast<uint32_t>(buffer.GetSize());
@@ -246,3 +256,18 @@ index b43f7ab..f907806 100644
  const std::string connectivity_cluster_t::cluster_arch_bitsize("64bit");
  #elif defined (__i386__) || defined(__arm__)
  const std::string connectivity_cluster_t::cluster_arch_bitsize("32bit");
+diff --git a/src/utils.hpp b/src/utils.hpp
+index ab99f2f..985a879 100644
+--- a/src/utils.hpp
++++ b/src/utils.hpp
+@@ -248,6 +248,10 @@ void remove_directory_recursive(const char *path);
+ 
+ #define ANY_PORT 0
+ 
++const int _is_bigendian = 1;
++#define is_bigendian() ( (*(char*)&_is_bigendian) == 0 )
++
++
+ template <class T>
+ T clone(const T& x) {
+     return x;

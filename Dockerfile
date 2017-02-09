@@ -1,6 +1,6 @@
 FROM s390x/ubuntu:16.04
 
-COPY *.sh *.hpp *.patch /RthDB/
+COPY *.sh *.patch /RthDB/
 
 EXPOSE 29015 28015 8080
 
