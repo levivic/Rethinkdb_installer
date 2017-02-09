@@ -3,3 +3,4 @@ cd rethinkdb
 git checkout v2.3.5
 cp ../s390x.patch .
 git apply s390x.patch
+mv ../utils.hpp src/client_protocol
